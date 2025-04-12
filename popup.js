@@ -1,26 +1,10 @@
+import { pipeline } from '@xenova/transformers';
+import './popup.css'; // ✅ this works after Webpack bundles it
 
-    // Check if Transformers.js is loaded
-    let transformersLoaded = false;
-    let pipelineFunction = null;
-    let AutoTokenizerClass = null;
+const transformersLoaded = true;
+const pipelineFunction = pipeline;
 
-    // Try to access the Transformers module
-    try {
-    if (window.Transformers) {
-    transformersLoaded = true;
-    pipelineFunction = window.Transformers.pipeline;
-    AutoTokenizerClass = window.Transformers.AutoTokenizer;
-} else if (window.pipeline && window.AutoTokenizer) {
-    transformersLoaded = true;
-    pipelineFunction = window.pipeline;
-    AutoTokenizerClass = window.AutoTokenizer;
-}
-} catch (e) {
-    console.error("Failed to access Transformers.js:", e);
-    transformersLoaded = false;
-}
-
-    // ML-based query optimizer using Hugging Face models
+// ML-based query optimizer using Hugging Face models
     class QueryOptimizer {
     constructor() {
     // Models to load
@@ -171,8 +155,11 @@
     // Try to load feature extraction model for embeddings
     try {
     progressCallback({stage: 'Loading embedding model...', progress: 50});
-    this.models.embedder = await pipelineFunction('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
-    this.mlModelsUsed.push('Sentence embedding model (MiniLM-L6)');
+        this.models.embedder = await pipelineFunction('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+            quantized: true,
+            local_files_only: true
+        });
+        this.mlModelsUsed.push('Sentence embedding model (MiniLM-L6)');
     progressCallback({stage: 'Embedding model loaded', progress: 80});
 } catch (error) {
     console.error('Error loading embedding model:', error);
