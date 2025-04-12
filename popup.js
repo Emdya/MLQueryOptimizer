@@ -155,7 +155,7 @@ const pipelineFunction = pipeline;
     // Try to load feature extraction model for embeddings
     try {
     progressCallback({stage: 'Loading embedding model...', progress: 50});
-        this.models.embedder = await pipelineFunction('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
+        this.models.embedder = await pipelineFunction('feature-extraction', './', {
             quantized: true,
             local_files_only: true
         });
@@ -494,7 +494,10 @@ const pipelineFunction = pipeline;
     const resultContainer = document.getElementById('result-container');
     const originalQueryElement = document.getElementById('original-query');
     const optimizedQueryElement = document.getElementById('optimized-query');
-    const originalTokensElement = document.getElementById('original-tokens');
+
+
+
+const originalTokensElement = document.getElementById('original-tokens');
     const optimizedTokensElement = document.getElementById('optimized-tokens');
     const tokenReductionElement = document.getElementById('token-reduction');
     const modelsListElement = document.getElementById('models-list');
@@ -569,8 +572,34 @@ const pipelineFunction = pipeline;
     optimizeButton.disabled = false;
 }
 });
+// Handle copy-to-clipboard for optimized query
+const copyButton = document.getElementById('copy-button');
+const copyFeedback = document.getElementById('copy-feedback');
+copyButton.addEventListener('click', () => {
+    const optimizedText = optimizedQueryElement.textContent;
 
-    // Initialize models on page load
+    if (!optimizedText.trim()) {
+        alert('Nothing to copy!');
+        return;
+    }
+
+    navigator.clipboard.writeText(optimizedText).then(() => {
+        copyButton.textContent = '✅';
+        copyButton.disabled = true;
+        copyFeedback.style.display = 'inline';
+
+        setTimeout(() => {
+            copyButton.textContent = '📋';
+            copyButton.disabled = false;
+            copyFeedback.style.display = 'none';
+        }, 1500);
+    }).catch(err => {
+        console.error('Copy failed:', err);
+    });
+});
+
+
+// Initialize models on page load
     window.addEventListener('DOMContentLoaded', async () => {
     try {
     // Check if Transformers.js is loaded

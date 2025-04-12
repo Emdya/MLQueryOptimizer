@@ -42,16 +42,14 @@ module.exports = {
         new CopyPlugin({
             patterns: [
                 { from: 'manifest.json', to: '.' },
-                { from: 'manifest.json', to: '.' },
-                { from: 'icon.png', to: '.' }, // ✅ This line copies icon.png
-                { from: 'manifest.json', to: '.' },
                 { from: 'icon.png', to: '.' },
                 { from: 'config.json', to: '.' },
                 { from: 'tokenizer.json', to: '.' },
                 { from: 'tokenizer_config.json', to: '.' },
                 { from: 'model_quantized.onnx', to: '.' }
-            ],
+            ]
+        })
 
-        }),
     ],
+
 };

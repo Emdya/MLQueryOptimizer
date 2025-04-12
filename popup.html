@@ -34,7 +34,13 @@
     <div id="result-container" class="result" style="display: none;">
         <h3>Results:</h3>
         <div><strong>Original:</strong> <span id="original-query"></span></div>
-        <div><strong>Optimized:</strong> <span id="optimized-query"></span></div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <strong>Optimized:</strong>
+            <span id="optimized-query" style="flex: 1;"></span>
+            <button id="copy-button" class="copy-button">📋</button>
+            <span id="copy-feedback" style="color: green; display: none;">Copied!</span>
+        </div>
+
 
         <div class="stats">
             <div><strong>Original tokens:</strong> <span id="original-tokens"></span></div>
